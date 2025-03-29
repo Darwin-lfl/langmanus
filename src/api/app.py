@@ -4,17 +4,19 @@ FastAPI application for LangManus.
 
 import json
 import logging
+import os
 from typing import Dict, List, Any, Optional, Union
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
 import asyncio
 from typing import AsyncGenerator, Dict, List, Any
 
 from src.graph import build_graph
-from src.config import TEAM_MEMBERS
+from src.config import TEAM_MEMBERS, TEAM_MEMBER_CONFIGRATIONS, BROWSER_HISTORY_DIR
 from src.service.workflow_service import run_agent_workflow
 
 # Configure logging
@@ -67,6 +69,7 @@ class ChatRequest(BaseModel):
     search_before_planning: Optional[bool] = Field(
         False, description="Whether to search before planning"
     )
+    team_members: Optional[list] = Field(None, description="enabled team members")
 
 
 @app.post("/api/chat/stream")
@@ -112,6 +115,7 @@ async def chat_endpoint(request: ChatRequest, req: Request):
                     request.debug,
                     request.deep_thinking_mode,
                     request.search_before_planning,
+                    request.team_members,
                 ):
                     # Check if client is still connected
                     if await req.is_disconnected():
@@ -124,6 +128,9 @@ async def chat_endpoint(request: ChatRequest, req: Request):
             except asyncio.CancelledError:
                 logger.info("Stream processing cancelled")
                 raise
+            except Exception as e:
+                logger.error(f"Error in workflow: {e}")
+                raise
 
         return EventSourceResponse(
             event_generator(),
@@ -132,4 +139,43 @@ async def chat_endpoint(request: ChatRequest, req: Request):
         )
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/browser_history/{filename}")
+async def get_browser_history_file(filename: str):
+    """
+    Get a specific browser history GIF file.
+
+    Args:
+        filename: The filename of the GIF to retrieve
+
+    Returns:
+        The GIF file
+    """
+    try:
+        file_path = os.path.join(BROWSER_HISTORY_DIR, filename)
+        if not os.path.exists(file_path) or not filename.endswith(".gif"):
+            raise HTTPException(status_code=404, detail="File not found")
+
+        return FileResponse(file_path, media_type="image/gif", filename=filename)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving browser history file: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/team_members")
+async def get_team_members():
+    """
+    Get the configuration of all team members.
+
+    Returns:
+        dict: A dictionary containing team member configurations
+    """
+    try:
+        return {"team_members": TEAM_MEMBER_CONFIGRATIONS}
+    except Exception as e:
+        logger.error(f"Error getting team members: {e}")
         raise HTTPException(status_code=500, detail=str(e))
