@@ -3,7 +3,7 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[English](./README.md) | [简体中文](./README_zh.md)
+[English](./README.md) | [简体中文](./README_zh.md) | [日本語](./README_ja.md)
 
 > 源于开源，回馈开源
 
