@@ -9,6 +9,7 @@ from .nodes import (
     browser_node,
     reporter_node,
     planner_node,
+    reflector_node, # 新增的节点
 )
 
 
@@ -23,4 +24,5 @@ def build_graph():
     builder.add_node("coder", code_node)
     builder.add_node("browser", browser_node)
     builder.add_node("reporter", reporter_node)
+    builder.add_node("reflector", reflector_node) # 新增的节点
     return builder.compile()

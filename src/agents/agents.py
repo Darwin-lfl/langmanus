@@ -30,3 +30,9 @@ browser_agent = create_react_agent(
     tools=[browser_tool],
     prompt=lambda state: apply_prompt_template("browser", state),
 )
+
+# reflector_agent = create_react_agent(
+#     get_llm_by_type(AGENT_LLM_MAP["reflector"]),
+#     tools=[tavily_tool, crawl_tool],
+#     prompt=lambda state: apply_prompt_template("reflector", state),
+# )

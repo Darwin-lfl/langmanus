@@ -35,5 +35,6 @@ __all__ = [
     # Other configurations
     "TEAM_MEMBERS",
     "TAVILY_MAX_RESULTS",
+    "BRAVE_MAX_RESULTS",
     "CHROME_INSTANCE_PATH",
 ]

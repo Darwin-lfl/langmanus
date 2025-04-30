@@ -44,7 +44,8 @@ def run_agent_workflow(user_input: str, debug: bool = False):
             # Runtime Variables
             "messages": [{"role": "user", "content": user_input}],
             "deep_thinking_mode": True,
-            "search_before_planning": True,
+            "search_before_planning": False,
+            "recursion_limit": 100, # 图比较复杂，将最大迭代次数从默认的25改为100
         }
     )
     logger.debug(f"Final workflow state: {result}")

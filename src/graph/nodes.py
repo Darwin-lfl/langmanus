@@ -13,6 +13,7 @@ from src.config.agents import AGENT_LLM_MAP
 from src.prompts.template import apply_prompt_template
 from src.tools.search import tavily_tool
 from .types import State, Router
+from dashscope import Application
 
 logger = logging.getLogger(__name__)
 
@@ -183,3 +184,42 @@ def reporter_node(state: State) -> Command[Literal["supervisor"]]:
         },
         goto="supervisor",
     )
+
+
+def reflector_node(state: State) -> Command[Literal["supervisor"]]:
+    """Reflector node that reviews and critiques the research process."""
+    logger.info("Reflector reviewing and critiquing the research process")    
+    
+    # 确保messages是字符串格式
+    messages = apply_prompt_template("reflector", state)
+    if isinstance(messages, list):
+        messages = "\n".join([msg.content if hasattr(msg, 'content') else str(msg) for msg in messages])
+    
+    # 调用阿里百炼云智能体（含MCP）的API
+    try:
+        response = Application.call(
+            api_key="sk-34ef669d0e00497b8d70e852b58f94d0",
+            app_id="269e676d6a42430c9748400d8cd8f9d8", 
+            prompt={"text": str(messages)}  # 确保传递的是字符串格式
+        )
+        logger.debug(f"Current state messages: {state['messages']}")
+        logger.debug(f"Reflector response: {response}")
+
+        # 确保response.content是字符串
+        response_content = response.content if hasattr(response, 'content') else str(response)
+        
+        return Command(
+            update={
+                "messages": [HumanMessage(content=response_content, name="reflector")],
+            },  
+            goto="supervisor",
+        )
+    except Exception as e:
+        logger.error(f"Error in reflector_node: {str(e)}")
+        return Command(
+            update={
+                "messages": [HumanMessage(content=f"Reflection error: {str(e)}", name="reflector")],
+            },
+            goto="supervisor",
+        )
+
