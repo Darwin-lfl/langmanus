@@ -16,7 +16,7 @@ LangManus is a community-driven AI automation framework that builds upon the inc
 [![Demo](./assets/demo.gif)](./assets/demo.mp4)
 
 - [View on YouTube](https://youtu.be/sZCHqrQBUGk)
-- [Download Video](https://github.com/langmanus/langmanus/blob/main/assets/demo.mp4)
+- [Download Video](https://github.com/Darwin-lfl/langmanus/blob/main/assets/demo.mp4)
 
 ## Table of Contents
 - [Quick Start](#quick-start)
@@ -38,7 +38,7 @@ LangManus is a community-driven AI automation framework that builds upon the inc
 
 ```bash
 # Clone the repository
-git clone https://github.com/langmanus/langmanus.git
+git clone https://github.com/Darwin-lfl/langmanus.git
 cd langmanus
 
 # Create and activate virtual environment through uv
@@ -276,7 +276,7 @@ Each agent's prompt is defined in a separate markdown file, making it easy to mo
 
 LangManus provides a default web UI.
 
-Please refer to the [langmanus/langmanus-web-ui](https://github.com/langmanus/langmanus-web) project for more details.
+Please refer to the [Darwin-lfl/langmanus-web-ui](https://github.com/Darwin-lfl/langmanus-web) project for more details.
 
 ## Development
 
