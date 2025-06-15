@@ -16,17 +16,18 @@ LangManus is a community-driven AI automation framework that builds upon the inc
 [![Demo](./assets/demo.gif)](./assets/demo.mp4)
 
 - [View on YouTube](https://youtu.be/sZCHqrQBUGk)
-- [Download Video](https://github.com/langmanus/langmanus/blob/main/assets/demo.mp4)
+- [Download Video](https://github.com/Darwin-lfl/langmanus/blob/main/assets/demo.mp4)
 
 ## Table of Contents
+
 - [Quick Start](#quick-start)
 - [Architecture](#architecture)
 - [Features](#features)
 - [Why LangManus?](#why-langmanus)
 - [Setup](#setup)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Configuration](#configuration)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
 - [Usage](#usage)
 - [Web UI](#web-ui)
 - [Development](#development)
@@ -38,7 +39,7 @@ LangManus is a community-driven AI automation framework that builds upon the inc
 
 ```bash
 # Clone the repository
-git clone https://github.com/langmanus/langmanus.git
+git clone https://github.com/Darwin-lfl/langmanus.git
 cd langmanus
 
 # Create and activate virtual environment through uv
@@ -77,32 +78,37 @@ The system consists of the following agents working together:
 ## Features
 
 ### Core Capabilities
+
 - 🤖 **LLM Integration**
-    - Support for open source models like Qwen
-    - OpenAI-compatible API interface
-    - Multi-tier LLM system for different task complexities
+  - Support for open source models like Qwen
+  - OpenAI-compatible API interface
+  - Multi-tier LLM system for different task complexities
 
 ### Tools and Integrations
+
 - 🔍 **Search and Retrieval**
-    - Web search via Tavily API
-    - Neural search with Jina
-    - Advanced content extraction
+  - Web search via Tavily API
+  - Neural search with Jina
+  - Advanced content extraction
 
 ### Development Features
+
 - 🐍 **Python Integration**
-    - Built-in Python REPL
-    - Code execution environment
-    - Package management with uv
+  - Built-in Python REPL
+  - Code execution environment
+  - Package management with uv
 
 ### Workflow Management
+
 - 📊 **Visualization and Control**
-    - Workflow graph visualization
-    - Multi-agent orchestration
-    - Task delegation and monitoring
+  - Workflow graph visualization
+  - Multi-agent orchestration
+  - Task delegation and monitoring
 
 ## Why LangManus?
 
 We believe in the power of open source collaboration. This project wouldn't be possible without the amazing work of projects like:
+
 - [Qwen](https://github.com/QwenLM/Qwen) for their open source LLMs
 - [Tavily](https://tavily.com/) for search capabilities
 - [Jina](https://jina.ai/) for neural search technology
@@ -165,9 +171,9 @@ CHROME_INSTANCE_PATH=/Applications/Google Chrome.app/Contents/MacOS/Google Chrom
 > **Note:**
 >
 > - The system uses different models for different types of tasks:
->     - Reasoning LLM for complex decision-making and analysis
->     - Basic LLM for simpler text-based tasks
->     - Vision-Language LLM for tasks involving image understanding
+>   - Reasoning LLM for complex decision-making and analysis
+>   - Basic LLM for simpler text-based tasks
+>   - Vision-Language LLM for tasks involving image understanding
 > - You can customize the base URLs for all LLMs independently
 > - Each LLM can use different API keys if needed
 > - Jina API key is optional. Provide your own key to access a higher rate limit (get your API key at [jina.ai](https://jina.ai/))
@@ -180,19 +186,23 @@ cp .env.example .env
 ```
 
 ### Configure Pre-commit Hook
+
 LangManus includes a pre-commit hook that runs linting and formatting checks before each commit. To set it up:
 
 1. Make the pre-commit script executable:
+
 ```bash
 chmod +x pre-commit
 ```
 
 2. Install the pre-commit hook:
+
 ```bash
 ln -s ../../pre-commit .git/hooks/pre-commit
 ```
 
 The pre-commit hook will automatically:
+
 - Run linting checks (`make lint`)
 - Run code formatting (`make format`)
 - Add any reformatted files back to staging
@@ -223,20 +233,19 @@ uv run server.py
 The API server exposes the following endpoints:
 
 - `POST /api/chat/stream`: Chat endpoint for LangGraph invoke with streaming support
-    - Request body:
-    ```json
-    {
-      "messages": [
-        {"role": "user", "content": "Your query here"}
-      ],
-      "debug": false
-    }
-    ```
-    - Returns a Server-Sent Events (SSE) stream with the agent's responses
+  - Request body:
+  ```json
+  {
+    "messages": [{ "role": "user", "content": "Your query here" }],
+    "debug": false
+  }
+  ```
+  - Returns a Server-Sent Events (SSE) stream with the agent's responses
 
 ### Advanced Configuration
 
 LangManus can be customized through various configuration files in the `src/config` directory:
+
 - `env.py`: Configure LLM models, API keys, and base URLs
 - `tools.py`: Adjust tool-specific settings (e.g., Tavily search results limit)
 - `agents.py`: Modify team composition and agent system prompts
@@ -252,20 +261,22 @@ LangManus uses a sophisticated prompting system in the `src/prompts` directory t
 - **Researcher ([`src/prompts/researcher.md`](src/prompts/researcher.md))**: Specializes in information gathering through web searches and data collection. Uses Tavily search and web crawling capabilities while avoiding mathematical computations or file operations.
 
 - **Coder ([`src/prompts/coder.md`](src/prompts/coder.md))**: Professional software engineer role focused on Python and bash scripting. Handles:
-    - Python code execution and analysis
-    - Shell command execution
-    - Technical problem-solving and implementation
+
+  - Python code execution and analysis
+  - Shell command execution
+  - Technical problem-solving and implementation
 
 - **File Manager ([`src/prompts/file_manager.md`](src/prompts/file_manager.md))**: Handles all file system operations with a focus on properly formatting and saving content in markdown format.
 
 - **Browser ([`src/prompts/browser.md`](src/prompts/browser.md))**: Web interaction specialist that handles:
-    - Website navigation
-    - Page interaction (clicking, typing, scrolling)
-    - Content extraction from web pages
+  - Website navigation
+  - Page interaction (clicking, typing, scrolling)
+  - Content extraction from web pages
 
 #### Prompt System Architecture
 
 The prompts system uses a template engine ([`src/prompts/template.py`](src/prompts/template.py)) that:
+
 - Loads role-specific markdown templates
 - Handles variable substitution (e.g., current time, team member information)
 - Formats system prompts for each agent
